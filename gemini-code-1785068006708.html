@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="system">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SIPS Lite - Sistem Informasi Pembinaan Santri</title>
+    <meta name="theme-color" content="#3b82f6">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="glass">
+        <div class="header-left">
+            <svg class="logo-svg" viewBox="0 0 24 24">
+                <path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72l5 2.73 5-2.73v3.72z"/>
+            </svg>
+            <div class="header-titles">
+                <h1 id="app-title-display">SIPS Lite</h1>
+                <p id="app-subtitle-display">Sistem Informasi Pembinaan Santri</p>
+            </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 4px;">
+            <button id="theme-toggle" class="ripple" aria-label="Toggle Dark Mode">🌙</button>
+            <button class="ripple" id="btn-open-settings" style="background:transparent; border:none; font-size:1.2rem; width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; color:var(--text-primary); cursor:pointer;">⚙️</button>
+        </div>
+    </header>
+
+    <!-- LOADING OVERLAY -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <main id="app-content">
+        
+        <!-- PAGE: DASHBOARD & STATISTIK -->
+        <section id="page-dashboard" class="page active">
+            <div class="dashboard-grid">
+                <div class="card ripple" onclick="document.querySelector('.nav-item[data-target=\'kelas\']').click()">
+                    <div class="card-icon icon-blue"><svg viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm0 2.7L18.5 12H17v8h-2v-6H9v6H7v-8H5.5L12 5.7z"/></svg></div>
+                    <div class="card-info"><h3 id="dash-count-kelas">0</h3><p>Jumlah Kelas</p></div>
+                </div>
+                <div class="card ripple" onclick="document.querySelector('.nav-item[data-target=\'santri\']').click()">
+                    <div class="card-icon icon-green"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg></div>
+                    <div class="card-info"><h3 id="dash-count-santri">0</h3><p>Total Santri</p></div>
+                </div>
+                <div class="card ripple" onclick="document.querySelector('.nav-item[data-target=\'kategori\']').click()">
+                    <div class="card-icon icon-purple"><svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg></div>
+                    <div class="card-info"><h3 id="dash-count-kategori">0</h3><p>Kategori Pelanggaran</p></div>
+                </div>
+                <div class="card ripple" onclick="document.querySelector('.nav-item[data-target=\'pelanggaran\']').click()">
+                    <div class="card-icon icon-orange"><svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg></div>
+                    <div class="card-info"><h3 id="dash-count-pelanggaran">0</h3><p>Pelanggaran Hari Ini</p></div>
+                </div>
+                <div class="card ripple" onclick="document.querySelector('.nav-item[data-target=\'riwayat\']').click()">
+                    <div class="card-icon icon-red"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></div>
+                    <div class="card-info"><h3 id="dash-count-total-pel">0</h3><p>Total Pelanggaran</p></div>
+                </div>
+                <div class="card ripple">
+                    <div class="card-icon icon-blue"><svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg></div>
+                    <div class="card-info"><h3 id="dash-count-poin">0</h3><p>Akumulasi Poin</p></div>
+                </div>
+            </div>
+
+            <div id="stat-empty" class="empty-state" style="height: auto; padding: 40px 0;">
+                <svg viewBox="0 0 24 24" style="width: 50px; height: 50px;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/></svg>
+                <h2>Belum ada data statistik</h2>
+                <p style="font-size: 0.8rem; color: var(--text-secondary);">Catat pelanggaran untuk melihat statistik</p>
+            </div>
+
+            <div id="stat-content" style="display: none; animation: fadeIn 0.5s ease;">
+                <div class="stat-section">
+                    <div class="stat-title">⚡ Ringkasan Cepat</div>
+                    <div class="ringkasan-box" id="stat-ringkasan-teks">
+                        Hari ini terdapat 0 pelanggaran.
+                    </div>
+                </div>
+                <div class="stat-section">
+                    <div class="stat-title">📊 Proporsi Kategori</div>
+                    <div class="progress-group">
+                        <div class="progress-label"><span>Ringan</span><span id="stat-pct-ringan">0%</span></div>
+                        <div class="progress-bar-bg"><div class="progress-bar-fill fill-ringan" id="stat-bar-ringan"></div></div>
+                    </div>
+                    <div class="progress-group">
+                        <div class="progress-label"><span>Sedang</span><span id="stat-pct-sedang">0%</span></div>
+                        <div class="progress-bar-bg"><div class="progress-bar-fill fill-sedang" id="stat-bar-sedang"></div></div>
+                    </div>
+                    <div class="progress-group">
+                        <div class="progress-label"><span>Berat</span><span id="stat-pct-berat">0%</span></div>
+                        <div class="progress-bar-bg"><div class="progress-bar-fill fill-berat" id="stat-bar-berat"></div></div>
+                    </div>
+                </div>
+                <div class="dashboard-grid" style="grid-template-columns: 1fr; gap: 20px;">
+                    <div class="stat-section" style="margin-bottom: 0;">
+                        <div class="stat-title">🔥 5 Pelanggaran Tersering</div>
+                        <ul class="top-list" id="stat-top-pelanggaran"></ul>
+                    </div>
+                    <div class="stat-section" style="margin-bottom: 0;">
+                        <div class="stat-title">⚠️ Santri Poin Tertinggi</div>
+                        <ul class="top-list" id="stat-top-santri"></ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PAGE: KELAS -->
+        <section id="page-kelas" class="page">
+            <div class="header-actions" id="kelas-header-actions" style="display: none;">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" id="search-kelas" placeholder="Cari nama kelas...">
+                </div>
+                <button class="btn-primary ripple" style="padding: 12px; border-radius: 16px;" onclick="openModalKelas()">
+                    <svg viewBox="0 0 24 24" style="margin:0;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </button>
+            </div>
+            <div id="kelas-list" class="list-container"></div>
+            <div id="kelas-empty" class="empty-state">
+                <svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72l5 2.73 5-2.73v3.72z"/></svg>
+                <h2>Belum ada data Kelas</h2>
+                <button class="btn-primary ripple" onclick="openModalKelas()">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    Tambah Kelas
+                </button>
+            </div>
+        </section>
+
+        <!-- PAGE: SANTRI -->
+        <section id="page-santri" class="page">
+            <div class="header-actions" id="santri-header-actions" style="display: none;">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" id="search-santri" placeholder="Cari nama santri...">
+                </div>
+                <button class="btn-primary ripple" style="padding: 12px; border-radius: 16px;" onclick="openModalSantri()">
+                    <svg viewBox="0 0 24 24" style="margin:0;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </button>
+            </div>
+            <div class="filter-row" id="santri-filter-row" style="display: none;">
+                <select id="filter-kelas-santri" class="filter-select"><option value="">Semua Kelas</option></select>
+                <select id="filter-status-santri" class="filter-select">
+                    <option value="">Semua Status</option>
+                    <option value="Aktif">Aktif</option>
+                    <option value="Lulus">Lulus</option>
+                    <option value="Pindah">Pindah</option>
+                    <option value="Nonaktif">Nonaktif</option>
+                </select>
+            </div>
+            <div id="santri-list" class="list-container"></div>
+            <div id="santri-empty" class="empty-state">
+                <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                <h2>Belum ada data Santri</h2>
+                <button class="btn-primary ripple" onclick="openModalSantri()">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    Tambah Santri
+                </button>
+            </div>
+        </section>
+
+        <!-- PAGE: KATEGORI -->
+        <section id="page-kategori" class="page">
+            <div class="header-actions" id="kategori-header-actions" style="display: none;">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" id="search-kategori" placeholder="Cari nama pelanggaran...">
+                </div>
+                <button class="btn-primary ripple" style="padding: 12px; border-radius: 16px;" onclick="openModalKategori()">
+                    <svg viewBox="0 0 24 24" style="margin:0;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </button>
+            </div>
+            <div class="filter-row" id="kategori-filter-row" style="display: none;">
+                <select id="filter-tingkat-kategori" class="filter-select">
+                    <option value="">Semua Kategori</option>
+                    <option value="Ringan">Ringan</option>
+                    <option value="Sedang">Sedang</option>
+                    <option value="Berat">Berat</option>
+                </select>
+                <select id="sort-poin-kategori" class="filter-select">
+                    <option value="">Urutkan Poin</option>
+                    <option value="asc">Poin Terendah</option>
+                    <option value="desc">Poin Tertinggi</option>
+                </select>
+            </div>
+            <div id="kategori-list" class="list-container"></div>
+            <div id="kategori-empty" class="empty-state">
+                <svg viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+                <h2>Belum ada kategori pelanggaran</h2>
+                <button class="btn-primary ripple" onclick="openModalKategori()">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    Tambah Kategori
+                </button>
+            </div>
+        </section>
+
+        <!-- PAGE: PELANGGARAN -->
+        <section id="page-pelanggaran" class="page">
+            <div class="header-actions" id="pelanggaran-header-actions" style="display: none;">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" id="search-pelanggaran" placeholder="Cari nama santri...">
+                </div>
+                <button class="btn-primary ripple" style="padding: 12px; border-radius: 16px;" onclick="openModalPelanggaran()">
+                    <svg viewBox="0 0 24 24" style="margin:0;"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                </button>
+            </div>
+            <div class="filter-row" id="pelanggaran-filter-row" style="display: none; flex-wrap: wrap;">
+                <input type="date" id="filter-tanggal-pelanggaran" class="filter-select" style="min-width: 100px;">
+                <select id="filter-kelas-pelanggaran" class="filter-select"><option value="">Semua Kelas</option></select>
+                <select id="filter-kategori-pelanggaran" class="filter-select"><option value="">Semua Kategori</option></select>
+            </div>
+            <div id="pelanggaran-list" class="list-container"></div>
+            <div id="pelanggaran-empty" class="empty-state">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                <h2>Belum ada data pelanggaran</h2>
+                <button class="btn-primary ripple" onclick="openModalPelanggaran()">
+                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                    Catat Pelanggaran
+                </button>
+            </div>
+        </section>
+
+        <!-- PAGE: RIWAYAT -->
+        <section id="page-riwayat" class="page">
+            <div class="header-actions" id="riwayat-header-actions" style="display: flex;">
+                <div class="search-box">
+                    <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                    <input type="text" id="search-riwayat" placeholder="Cari santri / pelanggaran...">
+                </div>
+            </div>
+            <div class="filter-row" id="riwayat-filter-row" style="display: flex; flex-wrap: wrap; margin-bottom: 16px;">
+                <input type="date" id="filter-tgl-riwayat" class="filter-select" style="flex: 1; min-width: 100px;">
+                <select id="filter-kelas-riwayat" class="filter-select" style="flex: 1;"><option value="">Semua Kelas</option></select>
+                <select id="sort-riwayat" class="filter-select" style="flex: 1.5;">
+                    <option value="newest">Terbaru</option>
+                    <option value="oldest">Terlama</option>
+                    <option value="poin_desc">Poin Terbesar</option>
+                    <option value="poin_asc">Poin Terkecil</option>
+                </select>
+            </div>
+            <div id="riwayat-list" class="list-container"></div>
+            <div id="riwayat-empty" class="empty-state" style="display: none;">
+                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                <h2>Belum ada riwayat pelanggaran</h2>
+            </div>
+        </section>
+
+        <!-- PAGE: PENGATURAN -->
+        <section id="page-pengaturan" class="page">
+            <form id="form-pengaturan">
+                <div class="settings-section">
+                    <h3><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72l5 2.73 5-2.73v3.72z"/></svg> Identitas Lembaga</h3>
+                    <div class="form-group">
+                        <label>Nama Sekolah / Pondok</label>
+                        <input type="text" id="set-nama-sekolah" class="form-control" placeholder="Contoh: Pondok Pesantren Al-Hikmah">
+                    </div>
+                    <div class="form-group" style="display: flex; gap:16px;">
+                        <div style="flex:1;">
+                            <label>Tahun Ajaran</label>
+                            <input type="text" id="set-tahun-ajaran" class="form-control" placeholder="2023/2024">
+                        </div>
+                        <div style="flex:1;">
+                            <label>Nama Admin (Opsional)</label>
+                            <input type="text" id="set-nama-admin" class="form-control" placeholder="Nama Anda">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Tema Aplikasi</label>
+                        <select id="set-tema-app" class="form-control">
+                            <option value="light">Terang (Light)</option>
+                            <option value="dark">Gelap (Dark)</option>
+                            <option value="system">Mengikuti Sistem (Auto)</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-block btn-primary ripple" style="margin-top:16px; border-radius:12px;">Simpan Pengaturan</button>
+                </div>
+            </form>
+
+            <div class="settings-section">
+                <h3><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg> Backup & Restore</h3>
+                <p style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:16px;">Amankan data Anda secara berkala atau pindahkan data ke perangkat lain.</p>
+                <div style="display:flex; gap:12px; margin-bottom: 12px;">
+                    <button class="btn-block ripple" style="background:var(--primary-light); color:var(--primary-color); border:none; padding:12px; border-radius:12px; font-weight:600; flex:1;" onclick="executeBackup()">📥 Backup Data</button>
+                    <button class="btn-block ripple" style="background:var(--primary-light); color:var(--primary-color); border:none; padding:12px; border-radius:12px; font-weight:600; flex:1;" onclick="document.getElementById('file-restore').click()">📤 Restore Data</button>
+                    <input type="file" id="file-restore" accept=".json" style="display:none;" onchange="executeRestore(event)">
+                </div>
+                <button class="btn-block ripple" style="background:rgba(239, 68, 68, 0.1); color:var(--danger-color); border:none; padding:12px; border-radius:12px; font-weight:600; width:100%;" onclick="document.getElementById('modal-reset-data').classList.add('show')">⚠️ Reset Semua Data</button>
+            </div>
+
+            <div class="about-box">
+                <svg viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18v6L12 21l7-3.82v-6l2-1.09V17h2V9L12 3zm6.82 6L12 12.72 5.18 9 12 5.28 18.82 9zM17 15.99l-5 2.73-5-2.73v-3.72l5 2.73 5-2.73v3.72z"/></svg>
+                <h2 style="color:var(--text-primary); font-size:1.2rem; margin-bottom:4px;">SIPS Lite</h2>
+                <p style="font-weight:600; margin-bottom:8px;">Versi 1.0 (Final Release)</p>
+                <p style="font-size:0.8rem;">Aplikasi pencatatan pelanggaran santri 100% Offline.<br>Data tersimpan aman di perangkat Anda.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- BOTTOM NAVIGATION -->
+    <nav>
+        <div class="nav-item active ripple" data-target="dashboard">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>Dashboard</span>
+        </div>
+        <div class="nav-item ripple" data-target="kelas">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3zm0 2.7L18.5 12H17v8h-2v-6H9v6H7v-8H5.5L12 5.7z"/></svg>
+            <span>Kelas</span>
+        </div>
+        <div class="nav-item ripple" data-target="santri">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            <span>Santri</span>
+        </div>
+        <div class="nav-item ripple" data-target="kategori">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+            <span>Kategori</span>
+        </div>
+        <div class="nav-item ripple" data-target="pelanggaran">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+            <span>Catat</span>
+        </div>
+        <div class="nav-item ripple" data-target="riwayat">
+            <svg class="nav-icon" viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            <span>Riwayat</span>
+        </div>
+    </nav>
+
+    <!-- KUMPULAN MODAL -->
+    <!-- Modal Kelas -->
+    <div id="modal-kelas" class="modal-overlay bottom-sheet">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-kelas-title">Tambah Kelas</h3>
+                <button class="close-modal" onclick="closeModalKelas()">&times;</button>
+            </div>
+            <form id="form-kelas">
+                <div class="form-group">
+                    <label>Nama Kelas <span style="color:var(--danger-color)">*</span></label>
+                    <input type="text" id="input-nama-kelas" class="form-control" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>Wali Kelas (Opsional)</label>
+                    <input type="text" id="input-wali-kelas" class="form-control" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>Keterangan (Opsional)</label>
+                    <input type="text" id="input-ket-kelas" class="form-control" autocomplete="off">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-block btn-cancel ripple" onclick="closeModalKelas()">Batal</button>
+                    <button type="submit" id="btn-save-kelas" class="btn-block btn-primary ripple">
+                        <span class="btn-text">Simpan</span>
+                        <div class="spinner-sm"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Santri -->
+    <div id="modal-santri" class="modal-overlay bottom-sheet">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h3 id="modal-santri-title">Tambah Santri</h3>
+                <button class="close-modal" onclick="closeModalSantri()">&times;</button>
+            </div>
+            <form id="form-santri">
+                <div class="form-group">
+                    <label>Nama Santri <span style="color:var(--danger-color)">*</span></label>
+                    <input type="text" id="input-nama-santri" class="form-control" required autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>Kelas <span style="color:var(--danger-color)">*</span></label>
+                    <select id="input-kelas-santri" class="form-control" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Nomor Induk (Opsional)</label>
+                    <input type="text" id="input-nis-santri" class="form-control" autocomplete="off">
+                </div>
+                <div class="form-group" style="display: flex; gap: 16px;">
+                    <div style="flex:1;">
+                        <label>Jenis Kelamin</label>
+                        <select id="input-jk-santri" class="form-control">
+                            <option value="L">Laki-laki</option>
+                            <option value="P">Perempuan</option>
+                        </select>
+                    </div>
+                    <div style="flex:1;">
+                        <label>Status</label>
+                        <select id="input-status-santri" class="form-control">
+                            <option value="Aktif">Aktif</option>
+                            <option value="Lulus">Lulus</option>
+                            <option value="Pindah">Pindah</option>
+                            <option value="Nonaktif">Nonaktif</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Catatan (Opsional)</label>
+                    <input type="text" id="input-catatan-santri" class="form-control" autocomplete="off">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-block btn-cancel ripple" onclick="closeModalSantri()">Batal</button>
+                    <button type="submit" id="btn-save-santri" class="btn-block btn-primary ripple">
+                        <span class="btn-text">Simpan</span>
+                        <div class="spinner-sm"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Kategori -->
+    <div id="modal-kategori" class="modal-overlay bottom-sheet">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h3 id="modal-kategori-title">Tambah Kategori</h3>
+                <button class="close-modal" onclick="closeModalKategori()">&times;</button>
+            </div>
+            <form id="form-kategori">
+                <div class="form-group">
+                    <label>Nama Pelanggaran <span style="color:var(--danger-color)">*</span></label>
+                    <input type="text" id="input-nama-kategori" class="form-control" required autocomplete="off">
+                </div>
+                <div class="form-group" style="display: flex; gap: 16px;">
+                    <div style="flex:1;">
+                        <label>Kategori <span style="color:var(--danger-color)">*</span></label>
+                        <select id="input-tingkat-kategori" class="form-control" required>
+                            <option value="Ringan">Ringan</option>
+                            <option value="Sedang">Sedang</option>
+                            <option value="Berat">Berat</option>
+                        </select>
+                    </div>
+                    <div style="flex:1;">
+                        <label>Poin <span style="color:var(--danger-color)">*</span></label>
+                        <input type="number" id="input-poin-kategori" class="form-control" required min="1">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Tindakan Awal (Opsional)</label>
+                    <input type="text" id="input-tindakan-kategori" class="form-control" autocomplete="off">
+                </div>
+                <div class="form-group">
+                    <label>Keterangan (Opsional)</label>
+                    <input type="text" id="input-ket-kategori" class="form-control" autocomplete="off">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-block btn-cancel ripple" onclick="closeModalKategori()">Batal</button>
+                    <button type="submit" id="btn-save-kategori" class="btn-block btn-primary ripple">
+                        <span class="btn-text">Simpan</span>
+                        <div class="spinner-sm"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Pelanggaran -->
+    <div id="modal-pelanggaran" class="modal-overlay bottom-sheet">
+        <div class="modal-content" style="max-height: 90vh; overflow-y: auto;">
+            <div class="modal-header">
+                <h3 id="modal-pelanggaran-title">Catat Pelanggaran</h3>
+                <button class="close-modal" onclick="closeModalPelanggaran()">&times;</button>
+            </div>
+            <form id="form-pelanggaran">
+                <div class="form-group" style="display: flex; gap: 16px;">
+                    <div style="flex:1;">
+                        <label>Tanggal <span style="color:var(--danger-color)">*</span></label>
+                        <input type="date" id="input-tgl-pelanggaran" class="form-control" required>
+                    </div>
+                    <div style="flex:1;">
+                        <label>Kelas <span style="color:var(--danger-color)">*</span></label>
+                        <select id="input-kelas-pelanggaran" class="form-control" required></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Santri <span style="color:var(--danger-color)">*</span></label>
+                    <select id="input-santri-pelanggaran" class="form-control" required disabled></select>
+                </div>
+                <div class="form-group">
+                    <label>Kategori Pelanggaran <span style="color:var(--danger-color)">*</span></label>
+                    <select id="input-kat-pelanggaran" class="form-control" required></select>
+                </div>
+                <div class="form-group" style="display: flex; gap: 16px;">
+                    <div style="flex:1;">
+                        <label>Poin</label>
+                        <input type="number" id="input-poin-pelanggaran" class="form-control" readonly style="background: var(--bg-color); font-weight: bold; color: var(--danger-color);">
+                    </div>
+                    <div style="flex:2;">
+                        <label>Petugas (Opsional)</label>
+                        <input type="text" id="input-petugas-pelanggaran" class="form-control">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Catatan (Opsional)</label>
+                    <input type="text" id="input-ket-pelanggaran" class="form-control">
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-block btn-cancel ripple" onclick="closeModalPelanggaran()">Batal</button>
+                    <button type="submit" id="btn-save-pelanggaran" class="btn-block btn-primary ripple">
+                        <span class="btn-text">Simpan</span>
+                        <div class="spinner-sm"></div>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Detail Riwayat -->
+    <div id="modal-detail-riwayat" class="modal-overlay bottom-sheet">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detail Pelanggaran</h3>
+                <button class="close-modal" onclick="closeModalDetailRiwayat()">&times;</button>
+            </div>
+            <div id="detail-riwayat-content"></div>
+            <div class="modal-actions">
+                <button type="button" class="btn-block btn-primary ripple" onclick="closeModalDetailRiwayat()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Konfirmasi Universal (Reused for all deletions) -->
+    <div id="modal-confirm" class="modal-overlay">
+        <div class="modal-content" style="text-align: center;">
+            <svg viewBox="0 0 24 24" style="width: 60px; height: 60px; fill: var(--danger-color); margin: 0 auto 16px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <h3 id="confirm-title" style="margin-bottom: 8px;">Hapus Data?</h3>
+            <p id="confirm-desc" style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">Data yang dihapus tidak dapat dikembalikan.</p>
+            <div class="modal-actions" style="margin-top: 0;">
+                <button class="btn-block btn-cancel ripple" onclick="closeConfirmModal()">Batal</button>
+                <button id="btn-confirm-execute" class="btn-block ripple" style="background: var(--danger-color); color: white; border: none;">Ya, Hapus</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Reset Data -->
+    <div id="modal-reset-data" class="modal-overlay">
+        <div class="modal-content" style="text-align: center;">
+            <svg viewBox="0 0 24 24" style="width: 60px; height: 60px; fill: var(--danger-color); margin: 0 auto 16px;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            <h3 style="margin-bottom: 8px;">Reset Semua Data?</h3>
+            <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px;">Seluruh data (Kelas, Santri, Kategori, Pelanggaran) akan dihapus secara permanen dan tidak dapat dikembalikan.</p>
+            <div class="modal-actions" style="margin-top: 0;">
+                <button class="btn-block btn-cancel ripple" onclick="document.getElementById('modal-reset-data').classList.remove('show')">Batal</button>
+                <button class="btn-block ripple" style="background: var(--danger-color); color: white; border: none;" onclick="executeResetData()">Ya, Hapus Semua</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST -->
+    <div id="toast" class="toast">Notifikasi</div>
+
+    <!-- APP SCRIPT -->
+    <script src="app.js"></script>
+</body>
+</html>
