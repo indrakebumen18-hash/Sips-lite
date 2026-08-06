@@ -11,7 +11,7 @@ const CACHE_NAME = 'sips-cache-v1'; // Naikkan angka versi ini setiap kali ada u
 // Sesuaikan path ini jika nama/lokasi file berbeda di server Anda
 const APP_SHELL = [
   './',
-  './index_sips.html',
+  './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'
